@@ -86,3 +86,4 @@ sw.*
 *.tar.gz
 
 .vscode
+.DS_Store

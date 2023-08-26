@@ -211,11 +211,12 @@ const downLoadPath = path.join('./static', folderName)
 // 下载 md 文件
 app.post('/getMdFile', function (req, res, next) {
   const qMd = req.body.md || '## 空空如也'
+  const qMdTitle = req.body.title || '## 空空如也'
   const qUrl = req.body.url || 'https://www.helloworld.net'
 
   // 写入md文件
   function writeFile () {
-    const mdName = `${Date.now()}.md`
+    const mdName = `${qMdTitle}.md` || `${Date.now()}.md`
     try {
       fs.writeFileSync(`${downLoadPath}/${mdName}`, qMd)
       res.status(200).send({

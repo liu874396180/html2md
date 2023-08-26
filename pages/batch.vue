@@ -108,17 +108,36 @@ export default {
     getInputFocus (event) {
       event.currentTarget.select()
     },
-    transformUrl () {
-      if (!this.url) { return }
-      this.isLoading = true
-      this.$axios.get(`${window.location.origin}/getUrlHtml`, { params: { url: this.url } })
-        .then((res) => {
-          this.html = res.html
-          this.title = res.title
-          this.isLoading = false
-        }).catch(() => {
-          this.isLoading = false
-        })
+    async transformUrl () {
+      // if (!this.url) { return }
+      // this.isLoading = true
+
+      /* eslint-disable */
+      const dataList = [
+        
+      ]
+      const mdList = []
+      for (const iterator of dataList) {
+        const { html, title } = await this.$axios.get(`${window.location.origin}/getUrlHtml`, { params: { url: iterator } })
+        const md = await this.html2md(html)
+        const lastTitle = title.replace(/_[^_]*$/, '')
+        mdList.push({ md, title: lastTitle })
+      }
+      console.log("mdList",mdList)
+      for (const iteratorMD of mdList) {
+        setTimeout(async() => {
+          const data = await this.$axios.post(`${window.location.origin}/getMdFile`, { md: iteratorMD.md, title: iteratorMD.title })
+          console.log(data)
+        }, 1500);
+      }
+      // this.$axios.get(`${window.location.origin}/getUrlHtml`, { params: { url: this.url } })
+      //   .then((res) => {
+      //     this.html = res.html
+      //     this.title = res.title
+      //     this.isLoading = false
+      //   }).catch(() => {
+      //     this.isLoading = false
+      //   })
     }
   }
 }
